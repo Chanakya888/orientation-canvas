@@ -1,46 +1,39 @@
 import React, { useState, useEffect } from "react";
+import { getBearing } from "geolocation-utils";
 
 const Direction = () => {
-  const [alpha, setAlpha] = useState(0);
-  const [beta, setBeta] = useState(0);
-  const [gamma, setGamma] = useState(0);
-  const [error, setError] = useState("");
+  const [direction, setDirection] = useState("");
 
   useEffect(() => {
-    const requestPermission = async () => {
-      try {
-        const { state } = await navigator.permissions.query({
-          name: "accelerometer",
-        });
-        if (state === "granted") {
-          window.addEventListener("deviceorientation", handleOrientation);
-        } else {
-          throw new Error("Permission denied");
-        }
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-    requestPermission();
-    return () => {
-      window.removeEventListener("deviceorientation", handleOrientation);
-    };
-  }, []);
+    // Replace these coordinates with the coordinates of your starting and ending points
+    const start = { lat: 37.7749, lon: -122.4194 };
+    const end = { lat: 37.3352, lon: -121.8811 };
 
-  const handleOrientation = (event) => {
-    const { alpha, beta, gamma } = event;
-    setAlpha(alpha);
-    setBeta(beta);
-    setGamma(gamma);
-  };
+    const bearing = getBearing(start, end);
+    let dir = "";
+    if (bearing >= 337.5 || bearing < 22.5) {
+      dir = "North";
+    } else if (bearing >= 22.5 && bearing < 67.5) {
+      dir = "Northeast";
+    } else if (bearing >= 67.5 && bearing < 112.5) {
+      dir = "East";
+    } else if (bearing >= 112.5 && bearing < 157.5) {
+      dir = "Southeast";
+    } else if (bearing >= 157.5 && bearing < 202.5) {
+      dir = "South";
+    } else if (bearing >= 202.5 && bearing < 247.5) {
+      dir = "Southwest";
+    } else if (bearing >= 247.5 && bearing < 292.5) {
+      dir = "West";
+    } else {
+      dir = "Northwest";
+    }
+    setDirection(dir);
+  }, []);
 
   return (
     <div>
-      <h1>Orientation Example</h1>
-      <p>Alpha: {alpha.toFixed(2)}</p>
-      <p>Beta: {beta.toFixed(2)}</p>
-      <p>Gamma: {gamma.toFixed(2)}</p>
-      {error && <div>{error}</div>}
+      <p>Direction: {direction}</p>
     </div>
   );
 };
