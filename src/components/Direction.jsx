@@ -1,40 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { getBearing } from "geolocation-utils";
 
 const Direction = () => {
   const [direction, setDirection] = useState("");
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Replace these coordinates with the coordinates of your starting and ending points
-    const start = { lat: 37.7749, lon: -122.4194 };
-    const end = { lat: 37.3352, lon: -121.8811 };
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          window.addEventListener("deviceorientation", handleOrientation);
 
-    const bearing = getBearing(start, end);
-    let dir = "";
-    if (bearing >= 337.5 || bearing < 22.5) {
-      dir = "North";
-    } else if (bearing >= 22.5 && bearing < 67.5) {
-      dir = "Northeast";
-    } else if (bearing >= 67.5 && bearing < 112.5) {
-      dir = "East";
-    } else if (bearing >= 112.5 && bearing < 157.5) {
-      dir = "Southeast";
-    } else if (bearing >= 157.5 && bearing < 202.5) {
-      dir = "South";
-    } else if (bearing >= 202.5 && bearing < 247.5) {
-      dir = "Southwest";
-    } else if (bearing >= 247.5 && bearing < 292.5) {
-      dir = "West";
+          function handleOrientation(event) {
+            const alpha = event.alpha;
+
+            let dir = "";
+            if (alpha >= 337.5 || alpha < 22.5) {
+              dir = "North";
+            } else if (alpha >= 22.5 && alpha < 67.5) {
+              dir = "Northeast";
+            } else if (alpha >= 67.5 && alpha < 112.5) {
+              dir = "East";
+            } else if (alpha >= 112.5 && alpha < 157.5) {
+              dir = "Southeast";
+            } else if (alpha >= 157.5 && alpha < 202.5) {
+              dir = "South";
+            } else if (alpha >= 202.5 && alpha < 247.5) {
+              dir = "Southwest";
+            } else if (alpha >= 247.5 && alpha < 292.5) {
+              dir = "West";
+            } else {
+              dir = "Northwest";
+            }
+            setDirection(dir);
+          }
+        },
+        (error) => {
+          setError(error.message);
+        }
+      );
     } else {
-      dir = "Northwest";
+      setError("Geolocation is not supported by this browser.");
     }
-    setDirection(dir);
   }, []);
 
   return (
-    <div>
-      <p>Direction: {direction}</p>
-    </div>
+    <div>{error ? <p>Error: {error}</p> : <p>Direction: {direction}</p>}</div>
   );
 };
 
