@@ -30,8 +30,11 @@ const Direction = () => {
               dir = "West";
               rot = -90;
             }
-            setDirection(dir);
-            setRotation(rot);
+
+            setTimeout(() => {
+              setDirection(dir);
+              setRotation(rot);
+            }, 100);
           }
         },
         (error) => {
@@ -48,7 +51,11 @@ const Direction = () => {
       <img
         src={ArrowSvg}
         alt="arrow"
-        style={{ transform: `rotate(${rotation}deg)` }}
+        // style={{ transform: `rotate(${90 + rotation}deg)` }}
+        style={{
+          transform: `rotate(${90 + rotation}deg)`,
+          transition: "transform 0.5s ease",
+        }}
       />
       {error ? <p>Error: {error}</p> : <p>Direction: {direction}</p>}
     </div>
