@@ -6,29 +6,26 @@ const Direction = () => {
   const [rotation, setRotation] = useState(0);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          window.addEventListener("deviceorientation", handleOrientation);
-
-          function handleOrientation(event) {
-            const alpha = event.alpha;
-
-            if (alpha !== null) {
-              const rotation = Math.round(alpha);
-              setRotation(rotation);
-            }
-          }
-        },
-        (error) => {
-          setError(error.message);
-        }
-      );
-      return () => navigator.geolocation.clearWatch(watchId);
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", handleOrientation, true);
     } else {
-      setError("Location access is not supported by this browser.");
+      setError("Device orientation not supported");
     }
+
+    return () => {
+      window.removeEventListener("deviceorientation", handleOrientation, true);
+    };
   }, []);
+
+  function handleOrientation(event) {
+    let rotation = 0;
+    if (event.webkitCompassHeading) {
+      rotation = 360 - event.webkitCompassHeading;
+    } else {
+      rotation = event.alpha || 0;
+    }
+    setRotation(rotation);
+  }
 
   return (
     <div>
