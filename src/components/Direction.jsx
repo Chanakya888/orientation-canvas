@@ -7,7 +7,7 @@ const Direction = () => {
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+      const watchId = navigator.geolocation.watchPosition(
         (position) => {
           window.addEventListener("deviceorientation", handleOrientation);
 
@@ -24,6 +24,7 @@ const Direction = () => {
           setError(error.message);
         }
       );
+      return () => navigator.geolocation.clearWatch(watchId);
     } else {
       setError("Location access is not supported by this browser.");
     }
