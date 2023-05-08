@@ -14,27 +14,17 @@ const Direction = () => {
 
           function handleOrientation(event) {
             const alpha = event.alpha;
-
-            let dir = "";
             let rot = 0;
             if (alpha >= 315 || alpha < 45) {
-              dir = "North";
               rot = 0;
             } else if (alpha >= 45 && alpha < 135) {
-              dir = "East";
               rot = 90;
             } else if (alpha >= 135 && alpha < 225) {
-              dir = "South";
               rot = 180;
             } else if (alpha >= 225 && alpha < 315) {
-              dir = "West";
               rot = -90;
             }
-
-            setTimeout(() => {
-              setDirection(dir);
-              setRotation(rot);
-            }, 100);
+            setRotation(rot);
           }
         },
         (error) => {
@@ -51,10 +41,9 @@ const Direction = () => {
       <img
         src={ArrowSvg}
         alt="arrow"
-        // style={{ transform: `rotate(${90 + rotation}deg)` }}
         style={{
-          transform: `rotate(${90 + rotation}deg)`,
-          transition: "transform 0.5s ease",
+          transform: `rotate(${-90 + rotation}deg)`,
+          transition: "transform 0.2s ease-out",
         }}
       />
       {error ? <p>Error: {error}</p> : <p>Direction: {direction}</p>}
