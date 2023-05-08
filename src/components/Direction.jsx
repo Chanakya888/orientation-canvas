@@ -27,11 +27,11 @@ const Direction = () => {
         src={ArrowSvg}
         alt="arrow"
         style={{
-          transform: `rotate(${-90 + rotation}deg)`,
+          transform: `rotate(${rotation}deg)`,
           transition: "transform 0.2s ease-out",
         }}
       />
-      <h1>{rotation}</h1>
+      <h1>{rotation.toFixed(2)}</h1>
     </div>
   );
 };
