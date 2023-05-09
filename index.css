@@ -1,0 +1,27 @@
+body {
+  margin: 0px;
+}
+#right-arrow {
+  width: 30px;
+  height: 30px;
+  background-image: url("./assets/right-arrow.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: rotate(-90deg);
+  transition: transform 0.2s ease-in-out;
+}
+
+.on-top {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+}
+
+.canvas-interactive-wrapper {
+  height: 100vh;
+  width: 100vw;
+}
+.canvas-gradient {
+  height: 100%;
+  width: 100%;
+}

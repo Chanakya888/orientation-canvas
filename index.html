@@ -2,12 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <title>This is a title</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div class="canvas-interactive-wrapper">
+      <canvas class="canvas-gradient"></canvas>
+    </div>
+    <div class="on-top">
+      <h1>Location pointer</h1>
+      <div id="right-arrow"></div>
+    </div>
+    <script src="granim.min.js"></script>
+    <script src="orientation.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
