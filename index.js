@@ -32,6 +32,10 @@ $(document).on("orientationChange", (event, data) => {
   var beta = data.normalized.beta;
   var gamma = data.normalized.gamma;
   console.log(getOrientation(alpha, beta, gamma));
+  const values = document.getElementById("values");
+  values.innerText =
+    "alpha" + alpha.toFixed(2) + "beta" + beta + "gamma" + gamma;
+
   arrow.style.transform = "rotate(" + (alpha - 90) + "deg)";
 });
 
