@@ -54,8 +54,8 @@ var granimInstance = new Granim({
 //   }
 // }
 
-// Check if the browser supports Geolocation API
-if (navigator.geolocation) {
+// Check if the browser supports Geolocation API and DeviceMotion API
+if (navigator.geolocation && window.DeviceMotionEvent) {
   // Request permission to access GPS sensor
   navigator.permissions.query({ name: "geolocation" }).then(function (result) {
     if (result.state === "granted") {
@@ -88,10 +88,8 @@ if (navigator.geolocation) {
                 currentPos.lon
               );
 
-              const values = document.getElementById("values");
-              values.innerText = "distance" + distance;
               // Check if the user has moved more than 10 meters
-              if (distance > 5) {
+              if (distance > 10) {
                 // Display an alert message
                 alert("You have moved more than 10 meters!");
                 // Update the last position
@@ -101,28 +99,27 @@ if (navigator.geolocation) {
           }
         });
       });
-    } else {
-      alert("access denied");
+    } else if (result.state === "prompt") {
+      // Prompt the user for permission to access the GPS sensor
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          // Access GPS sensor and update position
+          navigator.geolocation.watchPosition(function (position) {
+            // ...
+          });
+        },
+        function () {
+          // Handle error when the user denies permission
+          alert(
+            "You have denied access to the GPS sensor. Please enable location services to use this feature."
+          );
+        }
+      );
     }
   });
-}
-
-// Function to calculate the distance between two latitudes and longitudes in meters
-function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2 - lat1); // deg2rad below
-  var dLon = deg2rad(lon2 - lon1);
-  var a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c * 1000; // Distance in meters
-  return d;
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180);
+} else {
+  // Handle error when the browser does not support the required APIs
+  alert(
+    "Your browser does not support the Geolocation API or the DeviceMotion API. Please use a different browser to use this feature."
+  );
 }
