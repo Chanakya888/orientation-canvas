@@ -64,6 +64,7 @@ if (navigator.geolocation && window.DeviceMotionEvent) {
         var lat1 = position.coords.latitude;
         var lon1 = position.coords.longitude;
         var lastPos = { lat: lat1, lon: lon1 };
+        console.log(lat1, lon1);
 
         // Use accelerometer to determine movement
         window.addEventListener("devicemotion", function (event) {
@@ -74,6 +75,7 @@ if (navigator.geolocation && window.DeviceMotionEvent) {
           // Calculate total acceleration
           var acceleration = Math.sqrt(x * x + y * y + z * z);
 
+          console.log(acceleration, x, y, z);
           // Check if the user is moving
           if (acceleration > 1) {
             // Get the current position and calculate the distance traveled
@@ -87,11 +89,11 @@ if (navigator.geolocation && window.DeviceMotionEvent) {
                 currentPos.lat,
                 currentPos.lon
               );
-
+              console.log(distance);
               // Check if the user has moved more than 10 meters
-              if (distance > 10) {
+              if (distance > 1) {
                 // Display an alert message
-                alert("You have moved more than 10 meters!");
+                alert("You have moved more than 5 meters!");
                 // Update the last position
                 lastPos = currentPos;
               }
@@ -122,4 +124,24 @@ if (navigator.geolocation && window.DeviceMotionEvent) {
   alert(
     "Your browser does not support the Geolocation API or the DeviceMotion API. Please use a different browser to use this feature."
   );
+}
+
+// Function to calculate the distance between two latitudes and longitudes in meters
+function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1); // deg2rad below
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) *
+      Math.cos(deg2rad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c * 1000; // Distance in meters
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180);
 }
