@@ -1,8 +1,9 @@
 var currentLat, currentLng;
+let doc = document.getElementById("values");
 
 function logMovement(direction, distance) {
-  let doc = document.getElementById("values");
-  doc.innerText = "direction" + direction + distance + "distance";
+  doc.innerText =
+    "direction" + "-" + direction + ";" + "distance" + "-" + distance;
 }
 
 function successCallback(position) {
@@ -38,7 +39,7 @@ if ("permissions" in navigator) {
     } else if (result.state == "prompt") {
       navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
     } else {
-      console.log("Geolocation permission denied");
+      doc.innerText = "permission denied";
     }
   });
 } else {
